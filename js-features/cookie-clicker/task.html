@@ -1,37 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../../assets/css/style.css" />
-    <title>Игра-кликер</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .cookie {
+            cursor: pointer;
+            transition: transform 0.15s ease-in-out;
+        }
+        .counter {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo__container">
-          <a href="https://netology.ru/" class="logo__link"></a>
-        </div>
-        <h1 class="header__title">
-            Домашнее задание к занятию 1.1 «Возможности JavaScript в браузере». Игра-кликер.
-        </h1>
-    </header>
-    <main class="content">
-        <div class="card">
-            <div class="clicker">
-                <div class="clicker__status">
-                    Всего кликов <span id="clicker__counter">0</span>
-                </div>
-                <img 
-                    src="https://i.postimg.cc/T1bWdf2y/1024px-Pepperidge-Farm-Nantucket-Cookie.jpg" 
-                    alt=""
-                    id="cookie"
-                    class="clicker__cookie"
-                    width="200">
-            </div>
-        </div>
-    </main>    
+    <img class="cookie" src="cookie.png" alt="Cookie" width="200" height="200">
+    <p class="counter">Clicks: <span id="clicks">0</span></p>
+    <p class="speed" style="display:none;">Speed: <span id="click-speed">0</span> clicks/sec</p>
     <script src="task.js"></script>
 </body>
 </html>
