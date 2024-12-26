@@ -1,30 +1,67 @@
-.card {
-  width: 600px;
-  margin-bottom: 0;
+/* styles.css */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+.scoreboard {
+    margin-bottom: 20px;
+}
+
+.scoreboard p {
+    margin: 5px 0;
 }
 
 .hole-game {
-  width: 600px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+    background-color: #ddd;
+    border-radius: 10px;
 }
 
-.status {
-  margin-bottom: 20px;
-}
 .hole {
-  width: 150px;
-  height: 150px;
-  margin: 0 15px 30px;
-  background: gray;
-  border-radius: 50%;
+    width: 100%;
+    height: 120px;
+    background-color: brown;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
 }
 
-.hole_has-mole {
-  background-image: url(https://i.postimg.cc/rmtGV8h9/mole.png);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-color: brown;
+.hole::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 70%;
+    background-image: url('mole.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.hole_has-mole::before {
+    opacity: 1;
 }
