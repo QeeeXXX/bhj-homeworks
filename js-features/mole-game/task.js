@@ -1,60 +1,62 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', () => {
     const holes = document.querySelectorAll('.hole');
-    const winsDisplay = document.getElementById('wins');
-    const lossesDisplay = document.getElementById('losses');
+    const winsSpan = document.getElementById('wins');
+    const lossesSpan = document.getElementById('losses');
+
     let wins = 0;
     let losses = 0;
 
-    // Функция для получения случайной лунки
-    function randomHole() {
-        const idx = Math.floor(Math.random() * holes.length);
-        return holes[idx];
-    }
-
-    // Функция для добавления крота в случайную лунку
-    function peep() {
-        const targetHole = randomHole();
-        targetHole.classList.add('hole_has-mole');
-        setTimeout(() => {
-            targetHole.classList.remove('hole_has-mole');
-            if (wins === 10 || losses === 5) {
-                resetGame();
-            } else {
-                peep();
-            }
-        }, 800 + Math.random() * 700); // Крот прячется через 0.8–1.5 секунды
-    }
-
-    // Обработчики событий для лунок
+    // Добавляем обработчики событий для каждой лунки
     holes.forEach(hole => {
-        hole.addEventListener('click', function () {
-            if (hole.classList.contains('hole_has-mole')) {
+        hole.addEventListener('click', e => {
+            console.log(e.target.classList.contains('hole_has-mole')); // Логируем состояние класса
+            if (e.target.classList.contains('hole_has-mole')) {
+                // Успешная попытка убить крота
                 wins++;
-                winsDisplay.textContent = wins;
-                if (wins === 10) {
-                    alert('Поздравляю! Ты победил.');
+                winsSpan.textContent = wins;
+
+                if (wins >= 15) {
+                    alert('Поздравляю! Ты победил!');
                     resetGame();
                 }
             } else {
+                // Поражение
                 losses++;
-                lossesDisplay.textContent = losses;
-                if (losses === 5) {
-                    alert('К сожалению, ты проиграл.');
+                lossesSpan.textContent = losses;
+
+                if (losses >= 5) {
+                    alert('К сожалению, ты проиграл...');
                     resetGame();
                 }
             }
+
+            // Убираем крота после клика
+            e.target.classList.remove('hole_has-mole');
         });
     });
 
-    // Функция для сброса статистики и перезапуска игры
+    // Функция для сброса игры
     function resetGame() {
         wins = 0;
         losses = 0;
-        winsDisplay.textContent = wins;
-        lossesDisplay.textContent = losses;
-        peep(); // Перезапускаем игру
+        winsSpan.textContent = wins;
+        lossesSpan.textContent = losses;
     }
 
-    // Старт игры
-    peep();
+    // Функция для установки крота в случайный сектор
+    function setMole() {
+        // Генерация случайного числа от 1 до 9 для выбора сектора
+        const sectorIndex = Math.floor(Math.random() * 9) + 1;
+
+        // Вероятность появления крота в секторе
+        const probability = sectorIndex <= 3 ? 0.75 : sectorIndex > 6 ? 0.25 : 0.35;
+
+        // Устанавливаем крота в выбранный сектор, если сработала вероятность
+        if (Math.random() < probability) {
+            holes[sectorIndex - 1].classList.add('hole_has-mole');
+        }
+    }
+
+    // Запускаем установку крота каждые 500 мс
+    setInterval(setMole, 500);
 });
