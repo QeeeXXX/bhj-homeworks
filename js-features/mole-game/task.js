@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 wins++;
                 winsSpan.textContent = wins;
 
-                if (wins >= 15) {
+                if (wins >= 100) {
                     alert('Поздравляю! Ты победил!');
                     resetGame();
                 }
