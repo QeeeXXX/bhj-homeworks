@@ -1,94 +1,60 @@
 class Game {
-  constructor(container) {
-    this.container = container;
-    this.wordElement = container.querySelector('.word');
-    this.winsElement = container.querySelector('.status__wins');
-    this.lossElement = container.querySelector('.status__loss');
-
-    this.reset();
-
+  constructor() {
+    this.currentIndex = 0; // Индекс текущего символа
+    this.wins = 0; // Количество правильных ответов
+    this.losses = 0; // Количество неправильных ответов
     this.registerEvents();
   }
 
-  reset() {
-    this.setNewWord();
-    this.winsElement.textContent = 0;
-    this.lossElement.textContent = 0;
-  }
-
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода символа вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keyup', event => {
+      // Проверяем, является ли введенная клавиша печатаемым символом
+      if (event.key.length === 1 && !event.altKey && !event.ctrlKey) {
+        const currentSymbolElement = this.getCurrentSymbolElement(); // Получаем текущий символ
+        const currentSymbolText = currentSymbolElement.textContent; // Получаем текст текущего символа
+
+        const pressedKey = event.key.toUpperCase(); // Преобразуем символ к верхнему регистру
+        const currentSymbolUpper = currentSymbolText.toUpperCase(); // Приводим символ на экране к верхнему регистру
+
+        if (currentSymbolUpper === pressedKey) {
+          this.success(currentSymbolElement);
+        } else {
+          this.fail(currentSymbolElement);
+        }
+      }
+    });
   }
 
-  success() {
-    if(this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
-    this.currentSymbol.classList.add('symbol_correct');
-    this.currentSymbol = this.currentSymbol.nextElementSibling;
+  getCurrentSymbolElement() {
+    const symbols = document.querySelectorAll('.symbol');
+    return symbols[this.currentIndex]; // Возвращаем текущий символ
+  }
 
-    if (this.currentSymbol !== null) {
-      this.currentSymbol.classList.add('symbol_current');
-      return;
+  success(currentSymbolElement) {
+    console.log("Правильный символ!");
+    currentSymbolElement.classList.add('symbol_correct');
+    this.currentIndex++; // Переходим к следующему символу
+
+    if (this.currentIndex >= document.querySelectorAll('.symbol').length) {
+      this.wins++;
+      document.querySelector('.status__wins').textContent = this.wins;
+      alert(`Молодец! Ты справился со словом. Твои победы: ${this.wins}`);
+      location.reload(); // Перезагружаем страницу для нового слова
     }
+  }
 
-    if (++this.winsElement.textContent === 10) {
-      alert('Победа!');
-      this.reset();
+  fail(currentSymbolElement) {
+    console.log("Неправильный символ!");
+    currentSymbolElement.classList.add('word_incorrect');
+    this.losses++;
+    document.querySelector('.status__loss').textContent = this.losses;
+
+    if (this.losses >= 3) {
+      alert(`К сожалению, ты проиграл. Твои поражения: ${this.losses}`);
+      location.reload(); // Перезагружаем страницу для новой попытки
     }
-    this.setNewWord();
-  }
-
-  fail() {
-    if (++this.lossElement.textContent === 5) {
-      alert('Вы проиграли!');
-      this.reset();
-    }
-    this.setNewWord();
-  }
-
-  setNewWord() {
-    const word = this.getWord();
-
-    this.renderWord(word);
-  }
-
-  getWord() {
-    const words = [
-        'bob',
-        'awesome',
-        'netology',
-        'hello',
-        'kitty',
-        'rock',
-        'youtube',
-        'popcorn',
-        'cinema',
-        'love',
-        'javascript'
-      ],
-      index = Math.floor(Math.random() * words.length);
-
-    return words[index];
-  }
-
-  renderWord(word) {
-    const html = [...word]
-      .map(
-        (s, i) =>
-          `<span class="symbol ${i === 0 ? 'symbol_current': ''}">${s}</span>`
-      )
-      .join('');
-    this.wordElement.innerHTML = html;
-
-    this.currentSymbol = this.wordElement.querySelector('.symbol_current');
   }
 }
 
-new Game(document.getElementById('game'))
-
+// Запускаем игру
+new Game();
